@@ -5,10 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.RequestDispatcher;
 
 import login.user;
 
@@ -24,42 +20,22 @@ public class userDao {
             con = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/javasystem","root","root");
             ps = con.prepareStatement(
-                    "select user_name from user where user_id = ? and password = ?");
-            ps.setString(1, userId);
-            ps.setString(2, password);
-            rs = ps.executeQuery();
+                    "insert into  user(user_id,user_name,password) values (?,?,?)");
+            ps.setString(1, u.getUser_id());
+            ps.setString(2, u.getUser_name());
+            ps.setString(3, u.getPassword());
+            int result = ps.executeUpdate();
 
-            String userName = null;
-            //***追加***
-            List<user> userlist = new ArrayList<user>();
-            //*********
-            while(rs.next()) {
-                userName = rs.getString("user_name");
+            if(result != 1) {
+            	return false;
             }
 
-            RequestDispatcher dispatch = null;
-            if (userName != null) {
-            	//***追加***
-                ps = con.prepareStatement(
-                        "select user_id,user_name,password from user");
-                rs = ps.executeQuery();
-                while(rs.next()) {
-                	user user = new user(rs.getString("user_id") , rs.getString("user_name") , rs.getString("password"));
-                    userlist.add(user);
-                }
-
-            	session.setAttribute("userlist", userlist);
-            	//**********
-                dispatch = request.getRequestDispatcher("LoginOK.jsp");
-                dispatch.forward(request, response);
-            } else {
-                dispatch = request.getRequestDispatcher("LoginNG.jsp");
-                dispatch.forward(request, response);
-            }
         } catch(SQLException e_sql) {
             e_sql.printStackTrace();
+            return false;
         } catch(Exception e) {
             e.printStackTrace();
+            return false;
         } finally {
             try {
                 if (con != null) {
