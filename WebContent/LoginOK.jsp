@@ -12,34 +12,36 @@ List<user> userlist = (List<user>) session.getAttribute("userlist");
 <body>
     ログインに成功しました！！
     <br/>
-    <form method="POST" action="LoginServlet">
         <!-- 社員一覧を表示 -->
 	    <br/>
 	    <b>社員一覧</b>
 	    <br/>
 	    <table border="1" width="500" cellspacing="0" cellpadding="5" bordercolor="#333333">
 	    <tr>
-		<th bgcolor="#4169e1" width="150"><font color="#FFFFFF">id</font></th>
-		<th bgcolor="#4169e1" width="150"><font color="#FFFFFF">名前</font></th>
-		<th bgcolor="#4169e1" width="150"><font color="#FFFFFF">パスワード</font></th>
-		<th bgcolor="#4169e1" width="150"><font color="#FFFFFF">処理</font></th>
+			<th bgcolor="#4169e1" width="150"><font color="#FFFFFF">id</font></th>
+			<th bgcolor="#4169e1" width="150"><font color="#FFFFFF">名前</font></th>
+			<th bgcolor="#4169e1" width="150"><font color="#FFFFFF">パスワード</font></th>
+			<th bgcolor="#4169e1" width="150"><font color="#FFFFFF">処理</font></th>
 		</tr>
 		<tr>
-		<td bgcolor="#4169e1" align="center" nowrap><input name="new_id" type="text" ></input></td>
-		<td bgcolor="#4169e1" align="center" nowrap><input name="new_name" type="text" ></input></td>
-		<td bgcolor="#4169e1" align="center" nowrap><input name="new_password" type="password" ></input></td>
-		<td bgcolor="#4169e1" align="center" nowrap><input name="registration" type="submit" value="登録" ></td>
+	    	<form method="POST" action="LoginServlet">
+				<td bgcolor="#4169e1" align="center" nowrap><input name="new_id" type="text" ></input></td>
+				<td bgcolor="#4169e1" align="center" nowrap><input name="new_name" type="text" ></input></td>
+				<td bgcolor="#4169e1" align="center" nowrap><input name="new_password" type="password" ></input></td>
+				<td bgcolor="#4169e1" align="center" nowrap><input name="registration" type="submit" value="登録" ></td>
+		    </form>
 		</tr>
 	    <% for(user u: userlist) { %>
 			<tr>
-			<td bgcolor="#f0f8ff" align="center" nowrap><input type="text" value="<%= u.getUser_id() %>"></input></td>
-			<td bgcolor="#f0f8ff" align="center" nowrap><input type="text" value="<%= u.getUser_name() %>"></input></td>
-			<td bgcolor="#f0f8ff" align="center" nowrap><input type="password" value="<%= u.getPassword() %>"></input></td>
-			<td bgcolor="#4169e1" align="center" nowrap><input type="submit" value="更新"><input type="submit" value="削除"></td>
+			   	<form method="POST" action="LoginServlet">
+					<td bgcolor="#f0f8ff" align="center" nowrap><input name="new_id" type="text" value="<%= u.getUser_id() %>"></input></td>
+					<td bgcolor="#f0f8ff" align="center" nowrap><input name="new_name" type="text" value="<%= u.getUser_name() %>"></input></td>
+					<td bgcolor="#f0f8ff" align="center" nowrap><input name="new_password" type="password" value="<%= u.getPassword() %>"></input></td>
+					<td bgcolor="#4169e1" align="center" nowrap><input name="registration" type="submit" value="更新"><input type="submit" name="registration" value="削除"></td>
+				</form>
 			</tr>
 	    <% } %>
 	    </table>
-    </form>
     <br/>
     <form method="GET" action="LoginServlet">
         <input type="submit" value="ログイン画面へ">

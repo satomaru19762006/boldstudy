@@ -50,12 +50,32 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = request.getSession();
         RequestDispatcher dispatch = null;
 
-        if (!StringUtils.isEmptyOrWhitespaceOnly(registration) && registration.equals("登録")) {
-        	user u = new user(new_id,new_name,new_password);
-        	PostUserLogic pul = new PostUserLogic();
-        	pul.execute(u);
+        user u = new user(new_id,new_name,new_password);
+    	PostUserLogic pul = new PostUserLogic();
 
-        }
+
+    	if (!StringUtils.isEmptyOrWhitespaceOnly(registration)) {
+	    	switch (registration) {
+		    	case "登録":
+		    		pul.create(u);
+		    		break;
+		    	case "更新":
+		    		pul.update(u);
+		    		break;
+		    	case "削除":
+		    		pul.delete(u);
+		    		break;
+		    	default:
+	    	}
+    	}
+//        if (!StringUtils.isEmptyOrWhitespaceOnly(registration) && registration.equals("登録")) {
+//        	pul.create(u);
+//
+//        }
+//        if (!StringUtils.isEmptyOrWhitespaceOnly(registration) && registration.equals("更新")) {
+//        	pul.update(u);
+//
+//        }
         //**********
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -75,7 +95,7 @@ public class LoginServlet extends HttpServlet {
                 userName = rs.getString("user_name");
             }
 
-            if (userName != null || registration.equals("登録")) {
+            if (userName != null || registration.equals("登録") || registration.equals("更新") || registration.equals("削除")) {
             	//***追加***
                 ps = con.prepareStatement(
                         "select user_id,user_name,password from user");
@@ -89,10 +109,10 @@ public class LoginServlet extends HttpServlet {
 	           	//**********
 	            dispatch = request.getRequestDispatcher("LoginOK.jsp");
 	            dispatch.forward(request, response);
-	           } else {
-	                dispatch = request.getRequestDispatcher("LoginNG.jsp");
-	                dispatch.forward(request, response);
-	            }
+	         } else {
+	              dispatch = request.getRequestDispatcher("LoginNG.jsp");
+	              dispatch.forward(request, response);
+	         }
 	    } catch(SQLException e_sql) {
 	        e_sql.printStackTrace();
 	    } catch(Exception e) {
